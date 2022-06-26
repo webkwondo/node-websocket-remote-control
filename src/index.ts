@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { httpServer } from './http-server';
 import { WebSocketServer } from 'ws';
+import { wsController } from './ws-controller';
 
 const HOST = '127.0.0.1';
 const HTTP_PORT = parseInt((process.env.HTTP_PORT ?? '3000'), 10);
@@ -12,7 +13,7 @@ httpServer.listen(HTTP_PORT, HOST, () => {
 
 const ws = new WebSocketServer({ port: WS_PORT });
 
-// ws.on('connection', wsController);
+ws.on('connection', wsController);
 
 ws.on('close', () => {
   console.info('Disconnected');
