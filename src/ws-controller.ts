@@ -1,5 +1,6 @@
 import robot from 'robotjs';
 import { createWebSocketStream } from 'ws';
+import { drawRectangle, drawCircle, prntScrn } from './ws-model';
 
 export const wsController = async (connection: any) => {
 
@@ -55,7 +56,7 @@ export const wsController = async (connection: any) => {
         duplex.write(`draw_circle\0`);
         robot.mouseToggle('down');
         robot.mouseToggle('down');
-        // drawCircle(xPos - r, yPos, r);
+        drawCircle(xPos - r, yPos, r);
         robot.mouseToggle('up');
         console.info('Circle with radius', r);
         break;
@@ -65,7 +66,7 @@ export const wsController = async (connection: any) => {
         duplex.write(`draw_rectangle\0`);
         robot.mouseToggle('down');
         robot.mouseToggle('down');
-        // drawRectangle(xPos, yPos, w, h);
+        drawRectangle(xPos, yPos, w, h);
         robot.mouseToggle('up');
         console.info('Rectangle with width', w, 'and height', h);
         break;
@@ -74,11 +75,15 @@ export const wsController = async (connection: any) => {
         duplex.write(`draw_square\0`);
         robot.mouseToggle('down');
         robot.mouseToggle('down');
-        // drawRectangle(xPos, yPos, side, side);
+        drawRectangle(xPos, yPos, side, side);
         robot.mouseToggle('up');
         console.info('Square with side', side);
         break;
       case 'prnt_scrn':
+        prntScrn(xPos, yPos, (base64) => {
+          duplex.write(`prnt_scrn ${base64}`)
+          console.info('Screenshot done');
+        });
         break;
       default:
         break;
